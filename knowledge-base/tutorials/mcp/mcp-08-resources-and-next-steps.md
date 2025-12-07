@@ -26,11 +26,6 @@
 2. Add CI checks to validate the MCP artifact and run tests on PRs.
 3. Publish the artifact to your internal registry and try running it from another machine.
 
-## Suggestions for expanding this tutorial
-
-- Add a video walkthrough showing how to package and run an artifact.
-- Add diagrams for the execution flow and recommended folder layouts.
-- Provide a downloadable example repository that contains full examples and a simple registry mock.
 
 ## Contact and contributions
 
