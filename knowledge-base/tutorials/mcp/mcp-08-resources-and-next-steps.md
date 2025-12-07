@@ -1,10 +1,24 @@
 # MCP Tutorial — Chapter 8: Resources & Next Steps
 
+
 ## Further reading
 
-- MCP design docs (project-specific links) — (replace with your project's registry/docs links).
-- Reproducible builds and dependency pinning guides.
-- Papers and blog posts about model packaging and reproducibility.
+- Spring Boot reference docs: configuration, packaging, and deployment.
+- Spring Data JPA and H2 guides for local persistence and testing.
+- Guides on reproducible builds, jar signing, and secure supply chains.
+
+## Practical next steps
+
+1. Pick an internal model or module and rewrite its example as a Spring Boot component with `mcp.yaml` describing the contract.
+2. Add CI checks to validate the `mcp.yaml`, run `mvn test`, and build the artifact on PRs.
+3. Publish the artifact to a Maven registry and try running it from another machine or CI job.
+
+## Suggestions for expanding this tutorial
+
+- Add a complete example repository (done: `examples/spring-boot-ai`) with a small Spring Boot app, tests, and a Dockerfile.
+- Add diagrams for the execution flow and recommended folder layouts.
+- Provide a short guide for integrating Spring AI (or other model providers) into the `AiService` abstraction.
+
 
 ## Practical next steps
 

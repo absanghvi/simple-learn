@@ -5,54 +5,55 @@
 - Provide runnable examples that exercise the MCP contract flow.
 - Give exercises to practice packaging, validation, and running artifacts.
 
-## Example 1: Minimal Python component
+## Example 1: Minimal Spring Boot component (Greet API)
 
-Files:
+This example demonstrates a small Spring Boot application that exposes a `/greet` REST endpoint, stores greetings in an H2 in-memory DB, and uses an `AiService` abstraction that you can replace with a real Spring AI-backed bean.
 
-- `component.py`:
+Project location: `examples/spring-boot-ai`
 
-```python
-def predict(name: str) -> dict:
-    return {"greeting": f"Hello, {name}!"}
+Key files (created in the example project):
 
-if __name__ == '__main__':
-    print(predict('world'))
-```
+- `pom.xml` — Maven build with Spring Boot, H2, and test dependencies.
+- `src/main/java/com/example/mcp/GreetApplication.java` — SpringBootApplication main.
+- `src/main/java/com/example/mcp/controller/GreetController.java` — REST controller exposing `/greet`.
+- `src/main/java/com/example/mcp/service/AiService.java` — AI abstraction for generating greeting text.
+- `src/main/java/com/example/mcp/entity/Greeting.java` — JPA entity persisted to H2.
+- `src/main/java/com/example/mcp/repo/GreetingRepository.java` — Spring Data JPA repository.
 
-- `mcp.yaml`:
-
-```yaml
-name: greet-component
-version: 0.0.1
-entrypoint: component:predict
-inputs:
-  - name: name
-    type: string
-outputs:
-  - name: greeting
-    type: string
-```
-
-Run locally:
+Run locally (from repo root):
 
 ```powershell
-python -c "from component import predict; print(predict('Alice'))"
+mvn -f examples\spring-boot-ai\pom.xml clean package
+mvn -f examples\spring-boot-ai\pom.xml spring-boot:run
+```
+
+Call the API (example):
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://localhost:8080/greet -Body (@{name='Alice'} | ConvertTo-Json) -ContentType 'application/json'
 ```
 
 ## Exercises
 
-1. Extend the example to accept a language code and return localized greetings.
-2. Add unit tests for the component and run with `pytest`.
-3. Package the component and write a short `publish` script that creates a zip containing `component.py` and `mcp.yaml`.
+1. Replace the placeholder `AiService` with a real provider (e.g., a Spring AI bean or a cloud AI SDK) and update the app to call the real model.
+2. Add integration tests using `@SpringBootTest` that exercise the controller and repository with the H2 test profile.
+3. Containerize the service with a small `Dockerfile` and run it with Docker.
 
-## Example test (pytest)
+## Example test (JUnit + Spring)
 
-```python
-from component import predict
+```java
+@SpringBootTest
+class GreetControllerTest {
+  @Autowired
+  private TestRestTemplate rest;
 
-def test_greet():
-    out = predict('Sam')
-    assert out['greeting'] == 'Hello, Sam!'
+  @Test
+  void greetReturnsGreeting() {
+    var res = rest.postForEntity("/greet", Map.of("name", "Sam"), Map.class);
+    assertEquals(200, res.getStatusCodeValue());
+    assertTrue(((Map)res.getBody()).containsKey("greeting"));
+  }
+}
 ```
 
 ## Next

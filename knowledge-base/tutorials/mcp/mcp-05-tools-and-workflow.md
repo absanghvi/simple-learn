@@ -5,44 +5,40 @@
 - Introduce common tools used when building, packaging, testing, and publishing MCP artifacts.
 - Show a typical developer workflow from local dev to registry.
 
+
 ## Tool categories
 
-- Packaging: tools to build portable artifacts (wheel, Docker, custom packager).
-- Validation: schema checkers for `mcp.yaml`, unit and integration tests.
-- Registry: local or remote store for artifacts.
-- Orchestration: systems that run MCP artifacts at scale.
+- Packaging: Maven/Gradle for building jars, Docker for container images.
+- Validation: schema checkers for `mcp.yaml`, unit and integration tests using JUnit and Spring Test.
+- Registry: Maven repository, artifact storage, or container registries for Docker images.
+- Orchestration: Kubernetes or serverless runners that can run Spring Boot artifacts.
 
-## Example local workflow
+## Example local workflow (Java/Spring)
 
 1. Implement component and `mcp.yaml`.
 2. Run local unit tests:
 
 ```powershell
-pytest tests/
+mvn -f examples\spring-boot-ai\pom.xml test
 ```
 
-3. Build artifact (example: a zip or wheel + metadata).
-4. Validate the artifact with a schema linter.
-5. Publish to a registry or share the artifact file.
+3. Build a packaged jar:
 
-## Example validation script (python)
-
-```python
-import yaml
-
-def validate_mcp(path):
-    data = yaml.safe_load(open(path))
-    assert 'name' in data and 'entrypoint' in data
-
-if __name__ == '__main__':
-    validate_mcp('mcp.yaml')
-    print('mcp.yaml looks ok')
+```powershell
+mvn -f examples\spring-boot-ai\pom.xml clean package
 ```
+
+4. Validate the artifact with a schema linter (your `mcp.yaml` schema) and run integration tests.
+5. Publish to your artifact registry (Maven repo) or build and push a Docker image.
+
+## Example validation script (Java-friendly)
+
+You can still use a small YAML validator script (Python or Java). For a quick Java check, use SnakeYAML on the CLI or a small validation test in `src/test` that verifies `mcp.yaml` has required fields.
 
 ## CI suggestions
 
-- Run `pytest` and `mcp` schema checks in CI on every PR.
-- Build an artifact in CI and attach as a release candidate for reproducibility.
+- Run `mvn package` and the `mcp` schema checks in CI on every PR.
+- Publish the built artifact (jar) as part of your CI pipeline to a snapshot repository.
 
 ## Next
 

@@ -2,56 +2,56 @@
 
 ## Goals
 
-- Get your environment ready to follow the rest of this tutorial series.
-- Install necessary tools and verify a minimal working example.
+- Get your environment ready to follow the rest of this tutorial series which uses Java Spring Boot, Spring Data (H2) and (optionally) Spring AI for example integrations.
 
 ## Prerequisites
 
-- Basic familiarity with command line (PowerShell, bash).
-- Python 3.8+ installed (or the runtime your MCP uses).
-- Git for version control.
+- JDK 17+ (AdoptOpenJDK, Temurin, or OpenJDK). Set JAVA_HOME appropriately.
+- Maven 3.6+ (or Gradle if you prefer; this guide uses Maven examples).
+- Git for version control and a working shell (PowerShell on Windows examples below).
 
-## Recommended environment
+## Recommended environment (Windows / PowerShell)
 
-1. Create a virtual environment:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install --upgrade pip
-```
-
-2. Install common utilities used in this tutorial (adjust to your stack):
+1. Verify Java and Maven are installed:
 
 ```powershell
-pip install click pyyaml pytest
+java -version
+mvn -v
 ```
 
-3. Clone or navigate to your project workspace and confirm you can run a small sanity script.
-
-## Sanity check example (Python)
-
-Create `hello_mcp.py` with a tiny callable function and run it to confirm the environment works.
-
-```python
-def greet(name="MCP learner"):
-    return f"Hello, {name}!"
-
-if __name__ == '__main__':
-    print(greet())
-```
-
-Run:
+2. Configure a workspace directory and clone this repo (or create a new project):
 
 ```powershell
-python hello_mcp.py
+cd C:\Users\you\workspace
+git clone <your-repo>
+cd simple-learn\knowledge-base\tutorials\mcp
 ```
 
-Expected output: `Hello, MCP learner!`
+3. Install an IDE (recommended): IntelliJ IDEA, VS Code with Java extensions, or Eclipse.
+
+## Sanity check example (Maven)
+
+Create a minimal Maven project or use the example included in this tutorial under `examples/spring-boot-ai`. To quickly test Maven can build a project:
+
+```powershell
+mvn -f examples\spring-boot-ai\pom.xml clean package
+```
+
+If Maven builds successfully, you can run the example Spring Boot app:
+
+```powershell
+mvn -f examples\spring-boot-ai\spring-boot:run
+```
+
+Or run the packaged jar:
+
+```powershell
+java -jar examples\spring-boot-ai\target\spring-boot-ai-0.0.1-SNAPSHOT.jar
+```
 
 ## Notes
 
-- If your MCP runtime requires other dependencies (e.g., Java, Rust, a specific framework), install them now. We assume Python for examples but keep concepts language-agnostic otherwise.
+- This series uses Spring Boot for examples and H2 (in-memory) for simple persistence. The AI integration is demonstrated via a replaceable service abstraction so you can swap a mock implementation for a real Spring AI model bean or other provider.
 
 ## Next
 

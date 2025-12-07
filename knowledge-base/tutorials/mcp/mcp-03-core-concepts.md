@@ -12,31 +12,35 @@
 - Metadata: descriptive fields — author, version, provenance, hardware requirements.
 - Artifact: packaged component + metadata + assets.
 
-## Component structure (example)
 
-- `component.py` — the implementation or entrypoint.
-- `mcp.yaml` — the metadata/contract describing how to run `component.py`.
-- `requirements.txt` / `environment.yml` — dependencies.
-- `tests/` — small validation tests.
+## Component structure (example for Java/Spring Boot)
 
-### Example mcp.yaml (minimal)
+- `src/main/java/...` — Spring Boot application classes (controllers, services, entities).
+- `pom.xml` (or `build.gradle`) — build and dependency configuration.
+- `application.yml` / `application.properties` — runtime configuration (data source, ports).
+- `mcp.yaml` or equivalent metadata — a small metadata file describing the artifact, entrypoint, and contract (inputs/outputs).
+- `src/test/java/...` — unit and integration tests (JUnit/Mockito/Spring Test).
+
+### Example mcp.yaml (minimal) — Java style
 
 ```yaml
-name: example-component
+name: example-spring-component
 version: 0.1.0
-entrypoint: component:serve
+entrypoint: com.example.mcp.GreetApplication::main
+artifact: example-spring-component-0.1.0.jar
 inputs:
-  - name: text
+  - name: name
     type: string
 outputs:
-  - name: label
+  - name: greeting
     type: string
 ```
 
+
 ## Versioning and compatibility
 
-- Use semantic versioning for artifacts.
-- Keep a clear changelog and upgrade notes when contracts change.
+- Use semantic versioning for artifacts (jar versions). When using Spring Boot fat-jars, keep the artifact coordinates consistent across releases.
+- Keep a clear changelog and upgrade notes when contracts (REST endpoints, DTOs, database schemas) change. For Java DTO changes, consider introducing adapter layers to keep backwards compatibility.
 
 ## Exercises
 

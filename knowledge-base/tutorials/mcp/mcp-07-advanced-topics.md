@@ -6,23 +6,23 @@
 - Model and artifact provenance (signing, checksums, supply chain).
 - Streaming or stateful components and how to express them in contracts.
 
+
 ## Dependency isolation
 
-- Use pinned dependency manifests and lockfiles.
-- For full isolation, containerize the runtime with a small Dockerfile that installs only what's required.
+- Use pinned dependency coordinates in your `pom.xml` (explicit versions). For complete isolation, build a Docker image containing only the runtime and your fat jar.
 
 ## Provenance & signing
 
-- Include checksums for large assets in `mcp.yaml`.
-- Consider signing artifacts before publishing to a registry so consumers can verify origin.
+- Include checksums for large assets in `mcp.yaml` and sign artifacts (GPG signing for jars) before publishing to a Maven repository.
 
 ## Stateful components
 
-- When a component has state, document expected lifecycle operations (init, checkpoint, restore) in the contract.
+- For stateful Spring components (stateful services, caches, or model checkpoints), document lifecycle endpoints and expected behavior for init, checkpoint, and restore. Prefer externalizing state to durable stores and use migration scripts for schema changes.
 
 ## Scaling and observability
 
-- Emit structured logs and metrics from your component. Declare observability hooks in metadata when necessary.
+- Expose Micrometer metrics from your Spring Boot app and push to your metrics backend. Emit structured logs (JSON) and declare observability hooks in your artifact metadata.
+
 
 ## Next
 
